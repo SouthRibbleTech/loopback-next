@@ -62,14 +62,9 @@ describe('spike - requestBody decorator', () => {
         @post('/Product')
         create(
           @requestBody2(
-            {
-              description: 'Create a product',
-              required: true,
-            },
+            {description: 'Create a product', required: true},
             Product,
-            {
-              exclude: ['id'],
-            },
+            {exclude: ['id']},
           )
           product: Exclude<Product, ['id']>,
         ) {}
@@ -114,14 +109,9 @@ describe('spike - requestBody decorator', () => {
         @put('/Product')
         update(
           @requestBody2(
-            {
-              description: 'Update a product',
-              required: true,
-            },
+            {description: 'Update a product', required: true},
             Product,
-            {
-              partial: true,
-            },
+            {partial: true},
           )
           product: Partial<Product>,
         ) {}

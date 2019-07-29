@@ -79,14 +79,9 @@ class MyController2 {
   @put('/Product')
   update(
     @requestBody2(
-      {
-        description: 'Update a product',
-        required: true,
-      },
+      {description: 'Update a product', required: true},
       Product,
-      {
-        partial: true,
-      },
+      {partial: true},
     )
     product: Partial<Product>,
   ) {}
