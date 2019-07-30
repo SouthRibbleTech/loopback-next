@@ -44,7 +44,7 @@ export function createRetrieveSuite(
     name: string;
 
     @property()
-    categoryId: number;
+    categoryId?: number;
 
     constructor(data?: Partial<Product>) {
       super(data);
@@ -80,11 +80,12 @@ export function createRetrieveSuite(
       expect(toJSON(created)).to.deepEqual(toJSON(found));
     });
 
-    it('finds instances of a model from its foreign key', async () => {
-      await repo.create({name: 'Product', categoryId: 1});
-      await repo.create({name: 'Another product', categoryId: 2});
-      const product = await findByForeignKeys(repo, 'categoryId', [1]);
-      expect(product).deepEqual([{name: 'Product', categoryId: 1}]);
+    it('retrieves instances of a model from its foreign key', async () => {
+      const pens = await repo.create({name: 'Pens', categoryId: 1});
+      const pencils = await repo.create({name: 'Pencils', categoryId: 2});
+      const products = await findByForeignKeys(repo, 'categoryId', [1]);
+      expect(products).deepEqual([pens]);
+      expect(products).to.not.containDeep(pencils);
     });
   });
 }
