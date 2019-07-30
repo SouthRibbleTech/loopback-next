@@ -7,6 +7,7 @@ import {
   AnyObject,
   Entity,
   EntityCrudRepository,
+  findByForeignKeys,
   model,
   property,
 } from '@loopback/repository';
@@ -42,6 +43,9 @@ export function createRetrieveSuite(
     @property({type: 'string', required: true})
     name: string;
 
+    @property()
+    categoryId: number;
+
     constructor(data?: Partial<Product>) {
       super(data);
     }
@@ -74,6 +78,13 @@ export function createRetrieveSuite(
       const id = (toJSON(created) as AnyObject).id;
       const found = await repo.findById(id);
       expect(toJSON(created)).to.deepEqual(toJSON(found));
+    });
+
+    it('finds instances of a model from its foreign key', async () => {
+      await repo.create({name: 'Product', categoryId: 1});
+      await repo.create({name: 'Another product', categoryId: 2});
+      const product = await findByForeignKeys(repo, 'categoryId', [1]);
+      expect(product).deepEqual([{name: 'Product', categoryId: 1}]);
     });
   });
 }
