@@ -62,9 +62,13 @@ export function createRetrieveSuite(
       }),
     );
 
+    beforeEach(async () => {
+      await repo.deleteAll();
+    });
+
     it('retrieves a newly created model with id set by the database', async () => {
-      const created = await repo.create({name: 'Pencil'});
-      expect(created.toObject()).to.have.properties('id', 'name');
+      const created = await repo.create({name: 'Pencil', categoryId: 1});
+      expect(created.toObject()).to.have.properties('id', 'name', 'categoryId');
       expect(created.id).to.be.ok();
 
       const found = await repo.findById(created.id);
@@ -72,7 +76,7 @@ export function createRetrieveSuite(
     });
 
     it('retrieves a newly created model when id was transformed via JSON', async () => {
-      const created = await repo.create({name: 'Pen'});
+      const created = await repo.create({name: 'Pen', categoryId: 1});
       expect(created.id).to.be.ok();
 
       const id = (toJSON(created) as AnyObject).id;
